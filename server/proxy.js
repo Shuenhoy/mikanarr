@@ -5,6 +5,8 @@ const parser = new xml2js.Parser();
 
 const server = require('./server');
 
+const mikan_url = process.env.MIKAN_URL || "https://mikanani.me";
+
 server.get("/proxy", async (req, res) => {
   // proxy only requests to mikan anime to prevent attacks
   if (!req?.query?.url?.startsWith("https://mikanani.me")) {
@@ -12,7 +14,7 @@ server.get("/proxy", async (req, res) => {
     return;
   }
   try {
-    const { data: xmlStr } = await axios.get(req.query.url);
+    const { data: xmlStr } = await axios.get(req.query.url.replace("https://mikanani.me", mikan_url));
     const result = await parser.parseStringPromise(xmlStr);
     const titles = result.rss.channel[0].item.map(
       ({ title: [title] }) => title

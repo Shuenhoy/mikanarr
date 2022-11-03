@@ -8,11 +8,12 @@ const axios = require("axios");
 const qs = require("qs");
 
 const db = require('./db');
+const mikan_url = process.env.MIKAN_URL || "https://mikanani.me";
 
 const route = async (req, res) => {
   try {
     const { data: xmlStr } = await axios.get(
-      `https://mikanani.me${req.path}?${qs.stringify(req.query)}`
+      `${mikan_url}${req.path}?${qs.stringify(req.query)}`
     );
     const result = await parser.parseStringPromise(xmlStr);
 
